@@ -37,8 +37,6 @@ const getAllMovies = async () => {
 }
 
 const getJson = (url) => {
-	url = `${discoverUrl + 1}`;
-
 	const options = {
 		url: url,
 		method: 'GET',
