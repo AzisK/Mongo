@@ -1,0 +1,22 @@
+{
+  "name": "mongo",
+  "version": "1.0.0",
+  "description": "Get movies from an API and store them in Mongo",
+  "main": "getMovies.js",
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "mongodb": "^3.2.5",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongo",
+    "api",
+    "movies"
+  ],
+  "author": "azis",
+  "license": "ISC"
+}
