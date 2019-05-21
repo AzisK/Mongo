@@ -1,78 +1,58 @@
 require('dotenv').config();
 const fs = require('fs');
 
-const mongo = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 const url = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@ds155606.mlab.com:55606/kayakui`
 
-const moviesFile = './movies.json';
+const moviesDir = './movies/';
 
-const init = () => {
-	let string = loadJson();
+const init = async () => {
+	const client = new MongoClient(url, { useNewUrlParser: true });
 
-	if (!string) {
-		return
-	}
-
-	let json = JSON.parse(string)
-
-	mongo.connect(url,  { useNewUrlParser: true }, (err, client) => {
-		if (err) {
-			console.error(err);
-			return
-		} else {
-			console.log('Successfully connected to MongoDB!');
-		}
+	try {
+		await client.connect();
+		console.log('Successfully connected to MongoDB!');
 
 		const db = client.db('kayakui');
-	  
 		const collection = db.collection('Movies');
 
-		// collection.find().toArray((err, items) => {
-		// 	console.log(items);
-		// });
+		await uploadFiles(collection);
 
-
-		// collection.find().forEach(movie => {
-		// 	collection.update(
-		// 		{ 
-		// 			title: movie.title,
-		// 			id: movie.id
-		// 		},
-		// 		movie,
-		// 		{ upsert: true }
-		// 	);
-		// });
-
-		// collection.deleteMany({}, function(err, results){
-		// 	console.log(results.result);
-		// });
-
-		try {
-   			collection.insertMany(json.slice(354617, json.length), (err, result) => {
-				if (err) {
-					console.error(err);
-					return
-				} else {
-					console.log('Successfully inserted movies to MongoDB!\n', result);
-				}
-			});
-		} catch (e) {
-		   console.log(e);
-		}
-
-		// client.close();
-	})
-
+		client.close();
+	} catch (e) {
+		console.error(e);
+	}
 }
 
-const loadJson = () => {
-  try {
-    return fs.readFileSync(moviesFile, 'utf8');
-  } catch (err) {
-    console.error(err);
-    return false
-  }
+const uploadFiles = async (collection) => {
+
+	fs.readdirSync(moviesDir).forEach(async (filename) => {
+		if (!filename.endsWith('.json') || !filename.startsWith('movies')) {
+			console.log('Filename does not start with "movies" or does not end with ".json". Filename: ', filename);
+			return;
+		}
+
+		let content = fs.readFileSync(moviesDir + filename, 'utf-8');
+
+		try {
+			let json = JSON.parse(content);
+	    	await insertMovies(json, collection);
+    		console.log(`Movies from ${filename} inserted`);
+		} catch (e) {
+			console.error(e);
+		}
+
+	})
+}
+
+const insertMovies = async (json, collection) => {
+	try {
+		r = await collection.insertMany(json);
+		console.log(r);
+	} catch (e) {
+   		console.error(e);
+	}
 }
 
 // Init
