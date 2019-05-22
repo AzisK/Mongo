@@ -3,6 +3,7 @@ const fs = require('fs');
 
 const MongoClient = require('mongodb').MongoClient;
 
+
 const url = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@ds155606.mlab.com:55606/kayakui`
 
 const moviesDir = './movies/';

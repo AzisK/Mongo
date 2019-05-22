@@ -91,8 +91,8 @@ const getMoviesPage = async (page) => {
 const toJson = async (file) => {
 	try {
 		fs.writeFileSync(file, JSON.stringify(movies));
-	} catch (err) {
-		console.error(err);
+	} catch (e) {
+		console.error(e);
 	}
 }
 
