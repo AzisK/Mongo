@@ -16,6 +16,8 @@ const init = async () => {
 		console.log('Successfully connected to MongoDB!');
 
 		const db = client.db('kayakui');
+
+		// If you do not want to duplicate movies in the Movies, you can change the name of the name collection
 		const collection = db.collection('Movies');
 
 		await uploadFiles(collection);
@@ -38,8 +40,7 @@ const uploadFiles = async (collection) => {
 
 		try {
 			let json = JSON.parse(content);
-	    	await insertMovies(json, collection);
-    		console.log(`Movies from ${filename} inserted`);
+	    	await insertMovies(json, collection, filename);
 		} catch (e) {
 			console.error(e);
 		}
@@ -47,10 +48,10 @@ const uploadFiles = async (collection) => {
 	})
 }
 
-const insertMovies = async (json, collection) => {
+const insertMovies = async (json, collection, filename) => {
 	try {
 		r = await collection.insertMany(json);
-		console.log(r);
+    	console.log(`Movies from ${filename} inserted`);
 	} catch (e) {
    		console.error(e);
 	}
