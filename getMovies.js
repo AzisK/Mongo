@@ -34,7 +34,7 @@ const getFirstPage = async () => {
 const getAllMovies = async () => {
 	console.log('Start querying the API page by page');
 
-	for (let page = 2; page <= 1001; page++) {
+	for (let page = 2; page <= totalPages; page++) {
 
 		let isResponse = await getMoviesPage(page);
 
@@ -105,8 +105,8 @@ const emptyMovies = () => {
 	movies = [];
 }
 
+
 // Init
 (() => {
 	init();
 })();
-

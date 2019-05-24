@@ -56,6 +56,7 @@ const insertMovies = async (json, collection) => {
 	}
 }
 
+
 // Init
 (() => {
 	init();
