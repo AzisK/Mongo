@@ -62,3 +62,32 @@ Later to upload the movies to Mongo database run **uploadMovies.js**.
 * `node uploadMovies.js`
 
 Yet the database has the movies already uploaded, so you don't really need to. If you do not want to duplicate movies in the Movies, you can change the name of the name collection. You can also delete the movies from the `Movies` collection and the upload them. This Mongo database can be replaced with your own. Either local or remote database.
+
+***
+
+In order to be able to search by text in movie *title* and *overview*, add a text index on *title* and *overview* fields for the collection. You can do it in the MongoDB client or shell via terminal by running this command:
+
+```
+db.Movies.createIndex( 
+	{ title: "text", overview: "text" } 
+)
+```
+
+To be able to perform a text search by one field only, text index can be added on one field only, e.g.
+
+```
+db.Movies.createIndex( 
+	{ title: "text" } 
+)
+```
+
+To delete the text (full text search) index just replace *createIndex* by *dropIndex* and `{ "_fts" : "text", "_ftsx" : 1 }` add this key:
+
+```
+db.collection.dropIndex(
+	{ "_fts" : "text", "_ftsx" : 1 }
+)
+
+```
+
+More info on text indexes: [https://docs.mongodb.com/manual/core/index-text/](https://docs.mongodb.com/manual/core/index-text/)
